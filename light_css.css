@@ -1,0 +1,50 @@
+body {
+    background-color: rgba(245, 241, 249);
+}
+
+.fs-vh-title {
+    font-size: 3vh;
+}
+
+.text-box-font {
+    font-size: 7vh;
+    font-weight: 600;
+}
+
+.fn-btn-style {
+    width: 10vh;
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+
+    font-size: 1.5vh;
+    border-radius: 4px;
+}
+
+.fn-btn-style:hover {
+    background-color: rgb(216, 216, 216);
+}
+
+.fn-drop-style {
+    padding: 15 px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8vh;
+}
+
+.fn-drop-style:hover {
+    background-color: rgb(216, 216, 216);
+}
+
+.grid-btn-style {
+    box-shadow: 1px 1px 1px rgb(169, 169, 169);
+    font-size: 2.5vh;
+}
+
+.tri-btn-style {
+    width: 10vh;
+    height: 10vh;
+}

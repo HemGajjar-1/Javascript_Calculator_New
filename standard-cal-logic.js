@@ -6,6 +6,7 @@ let fullExpression = "";
 let memoryData = [];
 
 
+
 let isScientificTypeOne = true;
 // ======================= DISPLAY =======================
 
@@ -13,6 +14,19 @@ function updateDisplay() {
     display.innerText = currentInput || "0";
     expressionDisplay.innerText = fullExpression;
 }
+
+//======================== Closure Demo =========================
+const calculationCounter = (function () {
+
+    let count = 0;
+
+    return function () {
+        count++;
+        document.getElementById("cal-count").innerHTML = count;
+        return count;
+    };
+
+})();
 
 // ======================= BUTTON HANDLER =======================
 
@@ -23,7 +37,7 @@ document.addEventListener("click", function (e) {
     const value = btn.innerText.trim();
     if (!value) return;
 
-    // Handle numbers first
+
     if (!isNaN(value)) {
         appendNumber(value);
         return;
@@ -454,13 +468,13 @@ function isValidParentheses(expression) {
         }
         else if (char === ")") {
             if (stack.length === 0) {
-                return false; // closing before opening
+                return false;
             }
             stack.pop();
         }
     }
 
-    return stack.length === 0; // must be empty
+    return stack.length === 0;
 }
 
 function calculate() {
@@ -482,12 +496,12 @@ function calculate() {
 
         let expr = fullExpression;
 
-        // y√x  is converted to  x^(1/y)
+
         expr = expr.replace(/(\d+)\srooty\s(\d+)/g, (_, y, x) => {
             return `Math.pow(${x}, 1/${y})`;
         });
 
-        // logᵧx is converted to log(x)/log(y)
+
         expr = expr.replace(/(\d+)\slogy\s(\d+)/g, (_, y, x) => {
             return `(Math.log(${x}) / Math.log(${y}))`;
         });
@@ -511,6 +525,7 @@ function calculate() {
         fullExpression = "";
 
         updateDisplay();
+        calculationCounter();
 
     } catch {
         currentInput = "Error";
@@ -597,11 +612,11 @@ function renderMemory() {
     if (memoryData.length === 0) {
         memoryList.innerHTML =
             "<p class='text-muted mt-2'>There's nothing saved in memory</p>";
-        disableMemory();   // 🔥 disable here
+        disableMemory();
         return;
     }
 
-    enableMemory();  // 🔥 enable here
+    enableMemory();
 
     memoryData.forEach((value, index) => {
 
@@ -673,31 +688,68 @@ function memorySubtract() {
 document.addEventListener("click", function (e) {
 
     const index = e.target.dataset.index;
-
     if (index === undefined) return;
 
-    // Click value → Recall
     if (e.target.classList.contains("memory-value")) {
         currentInput = memoryData[index].toString();
         updateDisplay();
     }
+});
 
-    // Sidebar M+
-    if (e.target.classList.contains("mem-plus")) {
-        memoryData[index] += parseFloat(currentInput || 0);
-        renderMemory();
+document.addEventListener("keydown", function (e) {
+
+    const key = e.key;
+
+
+    if (!isNaN(key)) {
+        appendNumber(key);
+        return;
     }
 
-    // Sidebar M-
-    if (e.target.classList.contains("mem-minus")) {
-        memoryData[index] -= parseFloat(currentInput || 0);
-        renderMemory();
-    }
+    switch (key) {
 
-    // Delete single item
-    if (e.target.classList.contains("mem-delete")) {
-        memoryData.splice(index, 1);
-        renderMemory();
+        case ".":
+            appendDot();
+            break;
+
+        case "+":
+            appendOperator("+");
+            break;
+
+        case "-":
+            appendOperator("−");
+            break;
+
+        case "*":
+            appendOperator("×");
+            break;
+
+        case "/":
+            e.preventDefault();
+            appendOperator("÷");
+            break;
+
+        case "%":
+            appendOperator("mod");
+            break;
+
+        case "(":
+        case ")":
+            appendBracket(key);
+            break;
+
+        case "Enter":
+            e.preventDefault();
+            calculate();
+            break;
+
+        case "Backspace":
+            backspace();
+            break;
+
+        case "Escape":
+            clearAll();
+            break;
     }
 });
 

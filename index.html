@@ -31,14 +31,16 @@
     </div>
     <div class="main d-flex vh-100">
         <div class="calculator  w-100 w-lg-75 d-flex flex-column">
-            <div class="title-bar p-1 d-flex">
+            <div class="title-bar p-1 d-flex ">
                 <button class="btn bg-transparent  shadow-none" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                     <img src="images/menu_black.svg" id="menu-icon" style="width: 2.2vh;height: 2.2vh;" alt="">
                 </button>
-                <div id="current-type" class=" d-flex align-items-center w-25 ps-2 text-md fs-vh-title ">Standard
+                <div id="current-type" class=" d-flex align-items-center w-75 ps-2 text-md fs-vh-title ">Standard
                 </div>
-
+                <div class="align-content-center" style="font-size: 2.5vh;">
+                    Calculations in current session: <span id="cal-count">0</span>
+                </div>
             </div>
             <div id="textbar-2" class="text-end p-2  text-secondary" style="font-size: 1.7vh;height: 4vh;">
 

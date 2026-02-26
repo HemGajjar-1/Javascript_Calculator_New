@@ -118,7 +118,7 @@ document.addEventListener("click", function (e) {
             calc.toggleExponential();
             break;
         case "n!":
-            factorial();
+            calc.factorial();
             break;
 
         case "xʸ":

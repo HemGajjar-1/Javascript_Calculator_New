@@ -1,20 +1,20 @@
 const display = document.getElementById("textbar-1");
 const expressionDisplay = document.getElementById("textbar-2");
 
-let currentInput = "";
-let fullExpression = "";
-let memoryData = [];
-
-
-
-let isScientificTypeOne = true;
-// ======================= DISPLAY =======================
-
-function updateDisplay() {
-    display.innerText = currentInput || "0";
-    expressionDisplay.innerText = fullExpression;
+function Calculator() {
+    this.currentInput = "";
+    this.fullExpression = "";
+    this.memoryData = [];
+    this.isExponential = false;
 }
+let isScientificTypeOne = true;
+//======================= DISPLAY =======================
 
+Calculator.prototype.updateDisplay = function () {
+    display.innerText = this.currentInput || "0";
+    expressionDisplay.innerText = this.fullExpression;
+};
+const calc = new Calculator();
 //======================== Closure Demo =========================
 const calculationCounter = (function () {
 
@@ -28,7 +28,7 @@ const calculationCounter = (function () {
 
 })();
 
-// ======================= BUTTON HANDLER =======================
+//======================= BUTTON HANDLER =======================
 
 document.addEventListener("click", function (e) {
     const btn = e.target.closest("button");
@@ -39,14 +39,14 @@ document.addEventListener("click", function (e) {
 
 
     if (!isNaN(value)) {
-        appendNumber(value);
+        calc.appendNumber(value);
         return;
     }
 
     switch (value) {
 
         case ".":
-            appendDot();
+            calc.appendDot();
             break;
 
         case "+":
@@ -55,145 +55,147 @@ document.addEventListener("click", function (e) {
         case "÷":
         case "mod":
         case "^":
-            appendOperator(value);
+            calc.appendOperator(value);
             break;
 
         case "(":
         case ")":
-            appendBracket(value);
+            calc.appendBracket(value);
             break;
 
         case "=":
-            calculate();
+            calc.calculate();
             break;
 
         case "C":
-            clearAll();
+            calc.clearAll();
             break;
 
         case "CE":
-            clearEntry();
+            calc.clearEntry();
             break;
 
         case "⌫":
-            backspace();
+            calc.backspace();
             break;
 
         case "+/-":
-            toggleSign();
+            calc.toggleSign();
             break;
 
         case "%":
-            percentage();
+            calc.percentage();
             break;
 
         case "1/x":
-            reciprocal();
+            calc.reciprocal();
             break;
 
         case "x²":
-            square();
+            calc.square();
             break;
 
         case "√x":
-            squareRoot();
+            calc.squareRoot();
             break;
 
         case "π":
-            insertConstant("Math.PI");
+            calc.insertConstant("Math.PI");
             break;
 
         case "e":
-            insertConstant("Math.E");
+            calc.insertConstant("Math.E");
             break;
 
         case "|x|":
-            wrapFunction("Math.abs");
+            calc.wrapFunction("Math.abs");
             break;
 
         case "exp":
-            wrapFunction("Math.exp");
+            calc.wrapFunction("Math.exp");
             break;
-
+        case "F-E":
+            calc.toggleExponential();
+            break;
         case "n!":
             factorial();
             break;
 
         case "xʸ":
-            appendOperator("^");
+            calc.appendOperator("^");
             break;
 
         case "10ˣ":
-            wrapFunction("pow10");
+            calc.wrapFunction("pow10");
             break;
 
         case "log":
-            wrapFunction("Math.log10");
+            calc.wrapFunction("Math.log10");
             break;
 
         case "ln":
-            wrapFunction("Math.log");
+            calc.wrapFunction("Math.log");
             break;
 
         case "sin":
-            wrapFunction("Math.sin");
+            calc.wrapFunction("Math.sin");
             break;
 
         case "cos":
-            wrapFunction("Math.cos");
+            calc.wrapFunction("Math.cos");
             break;
 
         case "tan":
-            wrapFunction("Math.tan");
+            calc.wrapFunction("Math.tan");
             break;
 
         case "sec":
-            if (!currentInput) return;
-            fullExpression += `(1 / Math.cos(${currentInput}))`;
-            currentInput = "";
-            updateDisplay();
+            if (!calc.currentInput) return;
+            calc.fullExpression += `(1 / Math.cos(${calc.currentInput}))`;
+            calc.currentInput = "";
+            calc.updateDisplay();
             break;
 
         case "csc":
-            if (!currentInput) return;
-            fullExpression += `(1 / Math.sin(${currentInput}))`;
-            currentInput = "";
-            updateDisplay();
+            if (!calc.currentInput) return;
+            calc.fullExpression += `(1 / Math.sin(${calc.currentInput}))`;
+            calc.currentInput = "";
+            calc.updateDisplay();
             break;
 
         case "cot":
-            if (!currentInput) return;
-            fullExpression += `(1 / Math.tan(${currentInput}))`;
-            currentInput = "";
-            updateDisplay();
+            if (!calc.currentInput) return;
+            calc.fullExpression += `(1 / Math.tan(${calc.currentInput}))`;
+            calc.currentInput = "";
+            calc.updateDisplay();
             break;
 
         case "hyp":
-            if (!currentInput) return;
-            fullExpression += `Math.sinh(${currentInput})`;
-            currentInput = "";
-            updateDisplay();
+            if (!calc.currentInput) return;
+            calc.fullExpression += `Math.sinh(${calc.currentInput})`;
+            calc.currentInput = "";
+            calc.updateDisplay();
             break;
 
         case "⌊x⌋":
-            wrapFunction("Math.floor");
+            calc.wrapFunction("Math.floor");
             break;
 
         case "⌈x⌉":
-            wrapFunction("Math.ceil");
+            calc.wrapFunction("Math.ceil");
             break;
 
         case "rand":
-            currentInput = Math.random().toString();
-            updateDisplay();
+            calc.currentInput = Math.random().toString();
+            calc.updateDisplay();
             break;
 
         case "→deg":
-            convertToDegrees();
+            calc.convertToDegrees();
             break;
 
         case "→dms":
-            convertToDMS();
+            calc.convertToDMS();
             break;
 
         case "2ⁿᵈ":
@@ -201,43 +203,43 @@ document.addEventListener("click", function (e) {
             break;
 
         case "x³":
-            cube();
+            calc.cube();
             break;
 
         case "³√x":
-            cubeRoot();
+            calc.cubeRoot();
             break;
 
         case "ʸ√x":
-            appendOperator("rooty");
+            calc.appendOperator("rooty");
             break;
 
         case "2ˣ":
-            wrapFunction("pow2");
+            calc.wrapFunction("pow2");
             break;
 
         case "logᵧx":
-            appendOperator("logy");
+            calc.appendOperator("logy");
             break;
 
         case "eˣ":
-            wrapFunction("Math.exp");
+            calc.wrapFunction("Math.exp");
             break;
 
         case "MS":
-            memoryStore();
+            calc.memoryStore();
             break;
         case "MR":
-            memoryRecall();
+            calc.memoryRecall();
             break;
         case "MC":
-            memoryClear();
+            calc.memoryClear();
             break;
         case "M+":
-            memoryAdd();
+            calc.memoryAdd();
             break;
         case "M-":
-            memorySubtract();
+            calc.memorySubtract();
             break;
         default:
             break;
@@ -255,138 +257,172 @@ function toggleButtonList(btn) {
     }
 }
 
-// ======================= INPUT FUNCTIONS =======================
-console.log(Math.sin(30))
-function appendNumber(number) {
-    currentInput += number;
-    updateDisplay();
-}
+//======================= INPUT FUNCTIONS =======================
 
-function appendDot() {
-    if (!currentInput.includes(".")) {
-        if (currentInput === "") {
-            currentInput = "0.";
+Calculator.prototype.appendNumber = function (number) {
+    this.currentInput += number;
+    this.updateDisplay();
+};
+Calculator.prototype.toggleExponential = function () {
+
+    this.isExponential = !this.isExponential;
+
+    const feBtn = document.querySelector("#function-1 button:nth-child(2)");
+    if (feBtn) {
+        feBtn.classList.toggle("active-fe", this.isExponential);
+    }
+
+    const num = parseFloat(this.currentInput);
+
+    if (!isNaN(num)) {
+        this.currentInput = this.isExponential
+            ? num.toExponential(10)
+            : num.toString();
+    }
+
+    this.updateDisplay();
+};
+Calculator.prototype.appendDot = function () {
+
+    if (!this.currentInput.includes(".")) {
+
+        if (this.currentInput === "") {
+            this.currentInput = "0.";
         } else {
-            currentInput += ".";
+            this.currentInput += ".";
         }
-    }
-    updateDisplay();
-}
 
-function appendOperator(op) {
-    if (currentInput === "" && fullExpression === "") return;
-
-    if (currentInput !== "") {
-        fullExpression += currentInput;
-        currentInput = "";
     }
 
-    fullExpression += " " + op + " ";
-    updateDisplay();
-}
+    this.updateDisplay();
+};
 
-function appendBracket(bracket) {
+Calculator.prototype.appendOperator = function (op) {
+
+    if (this.currentInput === "" && this.fullExpression === "") return;
+
+    if (this.currentInput !== "") {
+        this.fullExpression += this.currentInput;
+        this.currentInput = "";
+    }
+
+    this.fullExpression += " " + op + " ";
+
+    this.updateDisplay();
+};
+
+Calculator.prototype.appendBracket = function (bracket) {
 
     if (bracket === ")") {
-        let openCount = (fullExpression + currentInput).split("(").length - 1;
-        let closeCount = (fullExpression + currentInput).split(")").length - 1;
+
+        let openCount = (this.fullExpression + this.currentInput).split("(").length - 1;
+        let closeCount = (this.fullExpression + this.currentInput).split(")").length - 1;
 
         if (closeCount >= openCount) {
             return;
         }
     }
 
-    if (currentInput !== "") {
-        fullExpression += currentInput;
-        currentInput = "";
+    if (this.currentInput !== "") {
+        this.fullExpression += this.currentInput;
+        this.currentInput = "";
     }
 
-    fullExpression += bracket;
-    updateDisplay();
-}
-function insertConstant(value) {
-    if (currentInput !== "") {
-        fullExpression += currentInput;
-        currentInput = "";
+    this.fullExpression += bracket;
 
+    this.updateDisplay();
+};
+Calculator.prototype.insertConstant = function (value) {
+
+    if (this.currentInput !== "") {
+        this.fullExpression += this.currentInput;
+        this.currentInput = "";
     }
-    fullExpression += value;
-    updateDisplay();
+
+    this.fullExpression += value;
+
+    this.updateDisplay();
+
     switch (value) {
         case "Math.PI":
-            display.innerHTML = Math.PI
+            display.innerHTML = Math.PI;
             break;
         case "Math.E":
-            display.innerHTML = Math.PI
-            break;
-        default:
+            display.innerHTML = Math.E;
             break;
     }
-}
-function wrapFunction(fnName) {
-    if (!currentInput) return;
+};
+Calculator.prototype.wrapFunction = function (fnName) {
+
+    if (!this.currentInput) return;
 
     if (fnName === "pow10") {
-        fullExpression += `Math.pow(10, ${currentInput})`;
+        this.fullExpression += `Math.pow(10, ${this.currentInput})`;
     }
     else if (fnName === "pow2") {
-        fullExpression += `Math.pow(2, ${currentInput})`;
+        this.fullExpression += `Math.pow(2, ${this.currentInput})`;
     }
     else {
-        fullExpression += `${fnName}(${currentInput})`;
+        this.fullExpression += `${fnName}(${this.currentInput})`;
     }
 
-    currentInput = "";
-    updateDisplay();
-}
-function convertToDegrees() {
-    if (!currentInput) return;
+    this.currentInput = "";
 
-    let radians = parseFloat(currentInput);
+    this.updateDisplay();
+};
+Calculator.prototype.convertToDegrees = function () {
+
+    if (!this.currentInput) return;
+
+    let radians = parseFloat(this.currentInput);
     let degrees = radians * (180 / Math.PI);
 
-    currentInput = degrees.toString();
-    updateDisplay();
-}
-function convertToDMS() {
-    if (!currentInput) return;
+    this.currentInput = degrees.toString();
 
-    let decimal = parseFloat(currentInput);
+    this.updateDisplay();
+};
+Calculator.prototype.convertToDMS = function () {
+
+    if (!this.currentInput) return;
+
+    let decimal = parseFloat(this.currentInput);
 
     let degrees = Math.floor(decimal);
     let minutesFloat = (decimal - degrees) * 60;
     let minutes = Math.floor(minutesFloat);
     let seconds = ((minutesFloat - minutes) * 60).toFixed(2);
 
-    currentInput = `${degrees}° ${minutes}' ${seconds}"`;
-    updateDisplay();
-}
+    this.currentInput = `${degrees}° ${minutes}' ${seconds}"`;
 
-// ======================= EXTRA BUTTONS =======================
+    this.updateDisplay();
+};
 
-// CE — clears only current number
-function clearEntry() {
-    currentInput = "";
-    updateDisplay();
-}
+//======================= EXTRA BUTTONS =======================
 
-// +/- — toggle positive/negative
-function toggleSign() {
-    if (!currentInput) return;
+Calculator.prototype.clearEntry = function () {
+    this.currentInput = "";
+    this.updateDisplay();
+};
 
-    currentInput = (parseFloat(currentInput) * -1).toString();
-    updateDisplay();
-}
+Calculator.prototype.toggleSign = function () {
 
-// % — percentage (currentInput / 100)
-function percentage() {
-    if (!currentInput) return;
+    if (!this.currentInput) return;
 
-    let percentValue = parseFloat(currentInput);
+    this.currentInput = (parseFloat(this.currentInput) * -1).toString();
 
-    let expressionParts = fullExpression.trim().split(" ");
+    this.updateDisplay();
+};
+
+Calculator.prototype.percentage = function () {
+
+    if (!this.currentInput) return;
+
+    let percentValue = parseFloat(this.currentInput);
+
+    let expressionParts = this.fullExpression.trim().split(" ");
 
     if (expressionParts.length >= 2) {
+
         let firstNumber = parseFloat(expressionParts[0]);
         let operator = expressionParts[1];
 
@@ -396,70 +432,97 @@ function percentage() {
         else if (operator === "×" || operator === "÷") {
             percentValue = percentValue / 100;
         }
+
     } else {
         percentValue = percentValue / 100;
     }
 
-    currentInput = percentValue.toString();
-    updateDisplay();
-}
+    this.currentInput = percentValue.toString();
 
-// 1/x — reciprocal
-function reciprocal() {
-    if (!currentInput) return;
+    this.updateDisplay();
+};
 
-    let num = parseFloat(currentInput);
+Calculator.prototype.reciprocal = function () {
+
+    if (!this.currentInput) return;
+
+    let num = parseFloat(this.currentInput);
 
     if (num === 0) {
-        currentInput = "Error";
+        this.currentInput = "Error";
     } else {
-        currentInput = (1 / num).toString();
+        this.currentInput = (1 / num).toString();
     }
 
-    updateDisplay();
-}
+    this.updateDisplay();
+};
 
-// x² — square
-function square() {
-    if (!currentInput) return;
+Calculator.prototype.square = function () {
 
-    let num = parseFloat(currentInput);
-    currentInput = (num * num).toString();
-    updateDisplay();
-}
+    if (!this.currentInput) return;
 
-// √x — square root
-function squareRoot() {
-    if (!currentInput) return;
+    let num = parseFloat(this.currentInput);
 
-    let num = parseFloat(currentInput);
+    this.currentInput = (num * num).toString();
+
+    this.updateDisplay();
+};
+
+Calculator.prototype.squareRoot = function () {
+
+    if (!this.currentInput) return;
+
+    let num = parseFloat(this.currentInput);
 
     if (num < 0) {
-        currentInput = "Error";
+        this.currentInput = "Error";
     } else {
-        currentInput = Math.sqrt(num).toString();
+        this.currentInput = Math.sqrt(num).toString();
     }
 
-    updateDisplay();
-}
-function cube() {
-    if (!currentInput) return;
+    this.updateDisplay();
+};
+Calculator.prototype.cube = function () {
 
-    let num = parseFloat(currentInput);
-    currentInput = Math.pow(num, 3).toString();
-    updateDisplay();
-}
-function cubeRoot() {
-    if (!currentInput) return;
+    if (!this.currentInput) return;
 
-    let num = parseFloat(currentInput);
-    currentInput = Math.cbrt(num).toString();
-    updateDisplay();
-}
+    let num = parseFloat(this.currentInput);
 
+    this.currentInput = Math.pow(num, 3).toString();
+
+    this.updateDisplay();
+};
+Calculator.prototype.cubeRoot = function () {
+
+    if (!this.currentInput) return;
+
+    let num = parseFloat(this.currentInput);
+
+    this.currentInput = Math.cbrt(num).toString();
+
+    this.updateDisplay();
+};
+Calculator.prototype.factorial = function () {
+    if (!this.currentInput) return;
+
+    let num = parseInt(this.currentInput);
+
+    if (num < 0) {
+        this.currentInput = "Error";
+    } else {
+        let result = 1;
+        for (let i = 2; i <= num; i++) {
+            result *= i;
+        }
+        this.currentInput = result.toString();
+    }
+
+    this.updateDisplay();
+};
 // ======================= CALCULATION =======================
 
-function isValidParentheses(expression) {
+Calculator.prototype.isValidParentheses = function (expression) {
+
     let stack = [];
 
     for (let char of expression) {
@@ -475,26 +538,25 @@ function isValidParentheses(expression) {
     }
 
     return stack.length === 0;
-}
+};
+Calculator.prototype.calculate = function () {
 
-function calculate() {
-
-    if (currentInput !== "") {
-        fullExpression += currentInput;
+    if (this.currentInput !== "") {
+        this.fullExpression += this.currentInput;
     }
 
-    if (fullExpression === "") return;
+    if (this.fullExpression === "") return;
 
-    if (!isValidParentheses(fullExpression)) {
-        currentInput = "Error";
-        fullExpression = "";
-        updateDisplay();
+    if (!this.isValidParentheses(this.fullExpression)) {
+        this.currentInput = "Error";
+        this.fullExpression = "";
+        this.updateDisplay();
         return;
     }
 
     try {
 
-        let expr = fullExpression;
+        let expr = this.fullExpression;
 
 
         expr = expr.replace(/(\d+)\srooty\s(\d+)/g, (_, y, x) => {
@@ -519,53 +581,59 @@ function calculate() {
             throw "Math Error";
         }
 
-        addToHistory(fullExpression + " =", result);
+        this.addToHistory(this.fullExpression + " =", result);
 
-        currentInput = result.toString();
-        fullExpression = "";
+        this.currentInput = result.toString();
+        this.fullExpression = "";
 
-        updateDisplay();
+        this.updateDisplay();
         calculationCounter();
 
     } catch {
-        currentInput = "Error";
-        fullExpression = "";
-        updateDisplay();
+        this.currentInput = "Error";
+        this.fullExpression = "";
+        this.updateDisplay();
     }
-}
+};
 
 
 // ======================= EDITING =======================
 
-function clearAll() {
-    currentInput = "";
-    fullExpression = "";
-    updateDisplay();
-}
+Calculator.prototype.clearAll = function () {
 
-function backspace() {
-    if (currentInput !== "") {
-        currentInput = currentInput.slice(0, -1);
+    this.currentInput = "";
+    this.fullExpression = "";
+
+    this.updateDisplay();
+};
+
+Calculator.prototype.backspace = function () {
+
+    if (this.currentInput !== "") {
+        this.currentInput = this.currentInput.slice(0, -1);
     } else {
-        fullExpression = fullExpression.slice(0, -1);
+        this.fullExpression = this.fullExpression.slice(0, -1);
     }
-    updateDisplay();
-}
+
+    this.updateDisplay();
+};
 
 // ======================= HISTORY =======================
 
-function addToHistory(expression, result) {
+Calculator.prototype.addToHistory = function (expression, result) {
+
     let history = JSON.parse(localStorage.getItem("calcHistory")) || [];
 
     history.unshift({ expression, result });
 
     localStorage.setItem("calcHistory", JSON.stringify(history));
 
-    renderHistory();
-}
+    this.renderHistory();
+};
 
-function renderHistory() {
-    const historyList = document.getElementById("history-list");
+Calculator.prototype.renderHistory = function () {
+
+    const historyList = this.historyContainer || document.getElementById("history-list");
     if (!historyList) return;
 
     historyList.innerHTML = "";
@@ -573,6 +641,7 @@ function renderHistory() {
     let history = JSON.parse(localStorage.getItem("calcHistory")) || [];
 
     history.forEach(item => {
+
         const div = document.createElement("div");
         div.className = "history-item mb-2 p-2 rounded text-end";
 
@@ -582,108 +651,123 @@ function renderHistory() {
         `;
 
         div.addEventListener("click", () => {
-            currentInput = item.result.toString();
-            fullExpression = "";
-            updateDisplay();
+            this.currentInput = item.result.toString();
+            this.fullExpression = "";
+            this.updateDisplay();
         });
 
         historyList.appendChild(div);
     });
-}
+};
+Calculator.prototype.clearHistory = function () {
 
-function clearHistory() {
     localStorage.removeItem("calcHistory");
-    renderHistory();
-}
+
+    this.renderHistory();
+};
 
 const clearHistoryButton = document.getElementById("clear-btn");
-
 if (clearHistoryButton) {
     clearHistoryButton.addEventListener("click", function () {
-        clearHistory();
+        calc.clearHistory();
     });
 }
 // ======================== Memory ==========================
-function renderMemory() {
+Calculator.prototype.renderMemory = function () {
 
     const memoryList = document.getElementById("memory-list");
+    if (!memoryList) return;
+
     memoryList.innerHTML = "";
 
-    if (memoryData.length === 0) {
+    if (!this.memoryData || this.memoryData.length === 0) {
         memoryList.innerHTML =
             "<p class='text-muted mt-2'>There's nothing saved in memory</p>";
-        disableMemory();
+
+        this.disableMemory();
         return;
     }
 
-    enableMemory();
+    this.enableMemory();
 
-    memoryData.forEach((value, index) => {
+    this.memoryData.forEach((value, index) => {
 
         const item = document.createElement("div");
 
-
         item.innerHTML = `
-    <div class="text-end py-3 fs-4 memory-value"
-         data-index="${index}"
-         style="cursor:pointer;">
-        ${value}
-    </div>
-`;
+            <div class="text-end py-3 fs-4 memory-value"
+                 data-index="${index}"
+                 style="cursor:pointer;">
+                ${value}
+            </div>
+        `;
 
         memoryList.appendChild(item);
     });
-}
-function enableMemory() {
-    document.getElementById("mc-btn").disabled = false;
-    document.getElementById("mr-btn").disabled = false;
-}
-function disableMemory() {
-    document.getElementById("mc-btn").disabled = true;
-    document.getElementById("mr-btn").disabled = true;
-}
+};
+Calculator.prototype.enableMemory = function () {
 
-function memoryStore() {
-    if (!currentInput) return;
+    const mcBtn = document.getElementById("mc-btn");
+    const mrBtn = document.getElementById("mr-btn");
 
-    memoryData.unshift(parseFloat(currentInput));
-    renderMemory();
-}
+    if (mcBtn) mcBtn.disabled = false;
+    if (mrBtn) mrBtn.disabled = false;
+};
+Calculator.prototype.disableMemory = function () {
 
-function memoryRecall() {
-    if (memoryData.length === 0) return;
+    const mcBtn = document.getElementById("mc-btn");
+    const mrBtn = document.getElementById("mr-btn");
 
-    currentInput = memoryData[0].toString();
-    updateDisplay();
-}
+    if (mcBtn) mcBtn.disabled = true;
+    if (mrBtn) mrBtn.disabled = true;
+};
 
-function memoryClear() {
-    memoryData = [];
-    renderMemory();
-}
-function memoryAdd() {
-    if (!currentInput) return;
+Calculator.prototype.memoryStore = function () {
 
-    if (memoryData.length === 0) {
-        memoryData.unshift(parseFloat(currentInput));
+    if (!this.currentInput) return;
+
+    this.memoryData.unshift(parseFloat(this.currentInput));
+
+    this.renderMemory();
+};
+Calculator.prototype.memoryRecall = function () {
+
+    if (!this.memoryData || this.memoryData.length === 0) return;
+
+    this.currentInput = this.memoryData[0].toString();
+
+    this.updateDisplay();
+};
+Calculator.prototype.memoryClear = function () {
+
+    this.memoryData = [];
+
+    this.renderMemory();
+};
+Calculator.prototype.memoryAdd = function () {
+
+    if (!this.currentInput) return;
+
+    if (!this.memoryData || this.memoryData.length === 0) {
+        this.memoryData = [parseFloat(this.currentInput)];
     } else {
-        memoryData[0] += parseFloat(currentInput);
+        this.memoryData[0] += parseFloat(this.currentInput);
     }
 
-    renderMemory();
-}
+    this.renderMemory();
+};
+Calculator.prototype.memorySubtract = function () {
 
-function memorySubtract() {
-    if (!currentInput) return;
+    if (!this.currentInput) return;
 
-    if (memoryData.length === 0) {
-        memoryData.unshift(-parseFloat(currentInput));
+    if (!this.memoryData || this.memoryData.length === 0) {
+        this.memoryData = [-parseFloat(this.currentInput)];
     } else {
-        memoryData[0] -= parseFloat(currentInput);
+        this.memoryData[0] -= parseFloat(this.currentInput);
     }
 
-    renderMemory();
-}
+    this.renderMemory();
+};
 
 document.addEventListener("click", function (e) {
 
@@ -691,8 +775,8 @@ document.addEventListener("click", function (e) {
     if (index === undefined) return;
 
     if (e.target.classList.contains("memory-value")) {
-        currentInput = memoryData[index].toString();
-        updateDisplay();
+        calc.currentInput = calc.memoryData[index].toString();
+        calc.updateDisplay();
     }
 });
 
@@ -702,56 +786,55 @@ document.addEventListener("keydown", function (e) {
 
 
     if (!isNaN(key)) {
-        appendNumber(key);
+        calc.appendNumber(key);
         return;
     }
 
     switch (key) {
 
         case ".":
-            appendDot();
+            calc.appendDot();
             break;
 
         case "+":
-            appendOperator("+");
+            calc.appendOperator("+");
             break;
 
         case "-":
-            appendOperator("−");
+            calc.appendOperator("−");
             break;
 
         case "*":
-            appendOperator("×");
+            calc.appendOperator("×");
             break;
 
         case "/":
             e.preventDefault();
-            appendOperator("÷");
+            calc.appendOperator("÷");
             break;
 
         case "%":
-            appendOperator("mod");
+            calc.appendOperator("mod");
             break;
 
         case "(":
         case ")":
-            appendBracket(key);
+            calc.appendBracket(key);
             break;
 
         case "Enter":
             e.preventDefault();
-            calculate();
+            calc.calculate();
             break;
 
         case "Backspace":
-            backspace();
+            calc.backspace();
             break;
 
         case "Escape":
-            clearAll();
+            calc.clearAll();
             break;
     }
 });
-
-renderHistory();
-updateDisplay();
+calc.renderHistory();
+calc.updateDisplay();

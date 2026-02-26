@@ -79,9 +79,18 @@ function changeMode(mode) {
         renderButtons(scientificButtons, 5);
     }
 }
-
+function changeUnit() {
+    let currentUnit = document.getElementById("deg-unit");
+    if (currentUnit.innerHTML == "DEG") {
+        currentUnit.innerHTML = "RAD"
+    } else if (currentUnit.innerHTML == "RAD") {
+        currentUnit.innerHTML = "GRAD"
+    } else if (currentUnit.innerHTML == "GRAD") {
+        currentUnit.innerHTML = "DEG"
+    }
+}
 document.addEventListener("DOMContentLoaded", function () {
-    changeToScientific()
+    changeToStandard()
     renderHistory();
 })
 
@@ -91,7 +100,6 @@ function changeTheme() {
         document.getElementById("trigDropdown1").classList.add("btn-dark")
         document.getElementById("trigDropdown1").classList.remove("btn-light")
         document.getElementById("trigDropdown2").classList.remove("btn-light")
-
         document.getElementById("css-link").setAttribute("href", "dark_css.css")
         document.getElementById("menu-icon").setAttribute("src", "images/menu_white.svg")
         document.getElementById("theme-change-btn").classList.remove("btn-light")
@@ -99,7 +107,6 @@ function changeTheme() {
         document.getElementById("theme-change-btn").innerHTML = "Change Theme ☀️"
         document.getElementById("clear-btn").classList.remove("btn-light")
         document.getElementById("clear-btn").classList.add("btn-dark")
-
         theme = "dark"
     }
     else if (theme == "dark") {
@@ -107,7 +114,6 @@ function changeTheme() {
         document.getElementById("trigDropdown2").classList.add("btn-light")
         document.getElementById("trigDropdown1").classList.remove("btn-dark")
         document.getElementById("trigDropdown2").classList.remove("btn-dark")
-
         document.getElementById("css-link").setAttribute("href", "light_css.css")
         document.getElementById("menu-icon").setAttribute("src", "images/menu_black.svg")
         document.getElementById("theme-change-btn").classList.remove("btn-dark")
@@ -115,7 +121,6 @@ function changeTheme() {
         document.getElementById("theme-change-btn").innerHTML = "Change Theme 🌙"
         document.getElementById("clear-btn").classList.remove("btn-dark")
         document.getElementById("clear-btn").classList.add("btn-light")
-
         theme = "light"
     }
 }
@@ -133,7 +138,7 @@ historyTab.addEventListener("click", () => {
     historyList.classList.remove("d-none");
     memoryListUI.classList.add("d-none");
 
-    clearBtn.classList.remove("d-none"); // show clear history
+    clearBtn.classList.remove("d-none");
 
     historyTab.classList.add("active-tab");
     memoryTab.classList.remove("active-tab");
@@ -144,7 +149,7 @@ memoryTab.addEventListener("click", () => {
     memoryListUI.classList.remove("d-none");
     historyList.classList.add("d-none");
 
-    clearBtn.classList.add("d-none"); // hide clear button
+    clearBtn.classList.add("d-none");
 
     memoryTab.classList.add("active-tab");
     historyTab.classList.remove("active-tab");
